@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Buddy</string>
+    <string name="accessibility_service_label">Buddy Assistant</string>
+    <string name="accessibility_service_desc">Provides system-wide AI text replacements using Gemini when trigger commands are typed.</string>
+</resources>

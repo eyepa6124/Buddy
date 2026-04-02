@@ -1,0 +1,54 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Kotlin #
+.kotlin/
+.kotlin_module
+
+# Android Studio #
+*.apk
+*.ap_
+*.aab
+*.dex
+*.class
+bin/
+gen/
+out/
+.idea/
+
+# Android Studio 3
+*.pb
+
+# Gradle #
+.gradle/
+build/
+app/build/
+
+# NDK #
+obj/
+
+# Keystore files #
+*.jks
+*.keystore
+
+# Google Services (e.g. APIs) #
+google-services.json
+
+# Mac #
+.DS_Store
+
+# Temporary outputs
+build_out.txt
