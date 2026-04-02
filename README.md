@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="logo.png" width="110" alt="Buddy App Logo" style="border-radius: 22px;" />
+<img src="logo.png" width="160" alt="Buddy App Logo" style="border-radius: 22px;" />
 
 <br/>
 <br/>
