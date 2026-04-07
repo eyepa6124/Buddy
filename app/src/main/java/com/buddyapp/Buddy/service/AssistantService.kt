@@ -27,6 +27,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.buddyapp.Buddy.api.PythonBridge
 import com.buddyapp.Buddy.manager.CommandManager
+import com.buddyapp.Buddy.manager.HistoryManager
 import com.buddyapp.Buddy.manager.KeyManager
 import com.buddyapp.Buddy.model.Command
 import kotlinx.coroutines.CancellationException
@@ -47,6 +48,7 @@ class AssistantService : AccessibilityService() {
 
     private lateinit var keyManager: KeyManager
     private lateinit var commandManager: CommandManager
+    private lateinit var historyManager: HistoryManager
     private val serviceJob = SupervisorJob()
     private val serviceScope = CoroutineScope(serviceJob + Dispatchers.IO)
     @Volatile private var isProcessing = false
@@ -79,6 +81,7 @@ class AssistantService : AccessibilityService() {
         super.onServiceConnected()
         keyManager = KeyManager(applicationContext)
         commandManager = CommandManager(applicationContext)
+        historyManager = HistoryManager(applicationContext)
         updateTriggers()
     }
 
@@ -115,9 +118,18 @@ class AssistantService : AccessibilityService() {
             return
         }
 
-        if (cleanText.isEmpty() || source.isPassword) return
+        if (cleanText.isEmpty() && !command.isTextReplacer) return
+        if (source.isPassword) return
         isProcessing = true
         currentJob?.cancel()
+
+        if (command.isTextReplacer) {
+            val prefixText = text.substring(0, text.length - command.trigger.length)
+            val newText = prefixText + command.prompt
+            handleTextReplacer(source, newText, text, command)
+            return
+        }
+
         processCommand(source, cleanText, command)
     }
 
@@ -166,7 +178,9 @@ class AssistantService : AccessibilityService() {
                         if (result.isSuccess) {
                             spinnerJob?.cancel(); spinnerJob = null
                             lastOriginalText = originalText
-                            replaceText(source, result.getOrThrow())
+                            val generatedText = result.getOrThrow()
+                            replaceText(source, generatedText)
+                            historyManager.addHistoryItem(originalText, generatedText, command.trigger)
                             performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                             succeeded = true
                             break
@@ -244,6 +258,23 @@ class AssistantService : AccessibilityService() {
                 }
             } catch (e: CancellationException) { throw e
             } catch (e: Exception) { showToast("Could not undo")
+            } finally {
+                withContext(NonCancellable + Dispatchers.Main) {
+                    if (!handler.postDelayed({ isProcessing = false }, 500)) isProcessing = false
+                }
+            }
+        }
+    }
+
+    private fun handleTextReplacer(source: AccessibilityNodeInfo, newText: String, originalText: String, command: Command) {
+        currentJob = serviceScope.launch {
+            try {
+                lastOriginalText = originalText
+                replaceText(source, newText)
+                historyManager.addHistoryItem(originalText, newText, command.trigger)
+                performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+            } catch (e: Exception) {
+                showToast("Buddy Error: ${e.message}")
             } finally {
                 withContext(NonCancellable + Dispatchers.Main) {
                     if (!handler.postDelayed({ isProcessing = false }, 500)) isProcessing = false

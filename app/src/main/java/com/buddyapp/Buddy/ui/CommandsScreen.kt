@@ -32,6 +32,7 @@ fun CommandsScreen() {
     var prompt by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var editingCommandTrigger by remember { mutableStateOf<String?>(null) }
+    var isTextReplacer by remember { mutableStateOf(false) }
     val prefix = commandManager.getTriggerPrefix()
 
     Column(
@@ -50,13 +51,34 @@ fun CommandsScreen() {
                 color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(12.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        selected = !isTextReplacer,
+                        onClick = { isTextReplacer = false }
+                    )
+                    Text("AI", fontSize = 14.sp)
+                }
+                Spacer(modifier = Modifier.width(16.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        selected = isTextReplacer,
+                        onClick = { isTextReplacer = true }
+                    )
+                    Text("Text Replacer", fontSize = 14.sp)
+                }
+            }
+            Spacer(modifier = Modifier.height(12.dp))
             OutlinedTextField(
                 value = trigger,
                 onValueChange = {
                     trigger = it
                     errorMessage = null
                 },
-                label = { Text("Trigger (e.g., ${prefix}code)") },
+                label = { Text(if (isTextReplacer) "Trigger (e.g., ${prefix}address)" else "Trigger (e.g., ${prefix}code)") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -68,7 +90,7 @@ fun CommandsScreen() {
             OutlinedTextField(
                 value = prompt,
                 onValueChange = { prompt = it },
-                label = { Text("Prompt (must ask for JUST modified text)") },
+                label = { Text(if (isTextReplacer) "Replacement Text (e.g., 123 Main St)" else "Prompt (must ask for JUST modified text)") },
                 modifier = Modifier.fillMaxWidth().height(100.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
@@ -93,6 +115,7 @@ fun CommandsScreen() {
                         editingCommandTrigger = null
                         trigger = ""
                         prompt = ""
+                        isTextReplacer = false
                         errorMessage = null
                     }) {
                         Text("Cancel")
@@ -112,7 +135,7 @@ fun CommandsScreen() {
                                 return@Button
                             }
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            val newCommand = Command(trimmedTrigger, prompt.trim(), false)
+                            val newCommand = Command(trimmedTrigger, prompt.trim(), false, isTextReplacer)
                             if (editingCommandTrigger != null) {
                                 commandManager.updateCommand(editingCommandTrigger!!, newCommand)
                             } else {
@@ -121,6 +144,7 @@ fun CommandsScreen() {
                             commands = commandManager.getCommands()
                             trigger = ""
                             prompt = ""
+                            isTextReplacer = false
                             errorMessage = null
                             editingCommandTrigger = null
                         }
@@ -177,6 +201,13 @@ fun CommandsScreen() {
                                     fontSize = 12.sp,
                                     color = MaterialTheme.colorScheme.tertiary
                                 )
+                            } else if (cmd.isTextReplacer) {
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = "Text Replacer",
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colorScheme.secondary
+                                )
                             }
                         }
                         Row {
@@ -185,6 +216,7 @@ fun CommandsScreen() {
                                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                     trigger = cmd.trigger
                                     prompt = cmd.prompt
+                                    isTextReplacer = cmd.isTextReplacer
                                     editingCommandTrigger = cmd.trigger
                                     errorMessage = null
                                 }) {
