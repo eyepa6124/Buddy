@@ -142,7 +142,6 @@ sequenceDiagram
 - **Static Text Replacers:** Create custom commands that instantly expand to normal static text (e.g. typing `/address` to output your home address) completely bypassing the AI for zero delays!
 - **In-App Updater:** The Dashboard now verifies your active APK version dynamically against the latest GitHub releases, alerting you seamlessly with direct download buttons.
 - **Enhanced UI:** Added explicit numbered indexing for your encrypted API Keys, plus completely interactive redirect links seamlessly letting you generate Gemini and OpenAI keys directly from the browser.
-- **Model Upgrades:** Native support for the newest Google `gemma-4` architecture models has been seamlessly integrated into settings.
 - **Strict Language Preservation:** Completely eradicated auto-translation side-effects. You can seamlessly type casually in Hinglish (or any specific alphabet) and the AI will critically preserve your alphabet structure returning strict Hinglish rather than breaking into Devanagari.
 
 > ℹ️ **Why ~20 MB?** Buddy bundles the full **Python 3.12 interpreter** via [Chaquopy](https://chaquo.com/chaquopy/) to handle AI API calls natively inside the APK — no Termux, no server, no extra installs needed.
@@ -355,7 +354,7 @@ Here are creative trigger ideas to inspire your custom command collection:
 
 ## 📸 App Screenshots
 
-> *Screenshots show the app's four main screens: Dashboard, API Keys, Commands, and Settings.*
+> *Screenshots show the app's main screens: Dashboard, API Keys, Commands, History, and Settings.*
 
 <div align="center">
 <table>
@@ -363,12 +362,14 @@ Here are creative trigger ideas to inspire your custom command collection:
     <td align="center"><b>Dashboard</b></td>
     <td align="center"><b>API Keys</b></td>
     <td align="center"><b>Commands</b></td>
+    <td align="center"><b>History</b></td>
     <td align="center"><b>Settings</b></td>
   </tr>
   <tr>
-    <td>Service toggle, grant accessibility, status indicator</td>
+    <td>Service toggle, update scanner, status indicator</td>
     <td>Add/remove API keys, round-robin rotation management</td>
     <td>Built-in triggers, add custom commands</td>
+    <td>View, copy, and clear past AI interactions</td>
     <td>Choose AI provider, model, custom endpoint, prefix</td>
   </tr>
 </table>
@@ -497,9 +498,10 @@ Buddy/
 │       ├── model/
 │       │   └── Command.kt          ← Data model for triggers
 │       └── ui/
-│           ├── DashboardScreen.kt  ← Service toggle, accessibility status
+│           ├── DashboardScreen.kt  ← Service toggle, accessibility status, update tracker
 │           ├── KeysScreen.kt       ← API key management
 │           ├── CommandsScreen.kt   ← Trigger browser + custom command editor
+│           ├── HistoryScreen.kt    ← Generation logs and local history cache
 │           └── SettingsScreen.kt   ← Provider, model, prefix configuration
 ├── build.gradle.kts                ← Project-level Gradle
 └── app/build.gradle.kts            ← App-level Gradle (Chaquopy config)
