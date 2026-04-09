@@ -20,7 +20,7 @@ A native Android Accessibility Service that injects AI directly into *any* text 
 
 <br/>
 
-[![Latest Release](https://img.shields.io/badge/Release-v1.1-blueviolet?style=flat-square)](#download)
+[![Latest Release](https://img.shields.io/badge/Release-v1.2-blueviolet?style=flat-square)](#download)
 [![APK Size](https://img.shields.io/badge/APK_Size-~20.4_MB-informational?style=flat-square)](#apk-info)
 [![Min SDK](https://img.shields.io/badge/Min_SDK-API_23-orange?style=flat-square)](#tech-stack)
 [![Target SDK](https://img.shields.io/badge/Target_SDK-API_35-brightgreen?style=flat-square)](#tech-stack)
@@ -131,13 +131,18 @@ sequenceDiagram
 
 | Property | Value |
 |:---|:---|
-| **Version** | v1.1 |
+| **Version** | v1.2 |
 | **APK Size** | ~20.4 MB (20,883 KB) |
 | **Architecture** | arm64-v8a |
 | **Min Android** | Android 6.0 (API 23) |
 | **Target Android** | Android 15 (API 35) |
 
-### ✨ What's New in v1.1
+### ✨ What's New in v1.2
+- **Premium API Analytics:** Keep track of the stability and success rate of your AI queries. Select any of your keys to launch a highly detailed dashboard tracking total requests, error rates, and active usage statistics globally.
+- **Intelligent Key Identity:** Keys are no longer ambiguously numbered. When you add a new key, the app dynamically identifies the provider signature (Gemini, OpenAI, Anthropic, Custom) and tags it properly!
+- **Sleeker Commands Experience:** Handcrafted a new floating `ModalBottomSheet` experience triggered by a FAB for adding/editing Custom Commands so the screen is never cluttered by permanent text fields. Command cards also received high-quality custom color badges (`Built-in`, `Text Replacer`, `AI`) that flawlessly match the premium dark theme!
+
+### ✨ Prior Release (v1.1)
 - **History Tab:** Keep track of every AI generation and text replacement locally. Easily copy, review, or clear your past outputs directly from the new bottom navigation bar.
 - **Static Text Replacers:** Create custom commands that instantly expand to normal static text (e.g. typing `/address` to output your home address) completely bypassing the AI for zero delays!
 - **In-App Updater:** The Dashboard now shows a compact GitHub button in the top-right corner — tap to star the repo when up to date, or get a direct link to the latest release when an update is available.
