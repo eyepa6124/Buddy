@@ -5,7 +5,7 @@ plugins {
     id("com.chaquo.python")
 }
 
-val baseVersion = "1.1"
+val baseVersion = "1.2"
 
 android {
     namespace = "com.buddyapp.Buddy"
@@ -16,7 +16,7 @@ android {
         applicationId = "com.buddyapp.Buddy"
         minSdk = 23
         targetSdk = 35
-        versionCode = 2
+        versionCode = 3
         versionName = "$baseVersion"
 
         vectorDrawables { useSupportLibrary = true }
