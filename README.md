@@ -20,7 +20,7 @@ A native Android Accessibility Service that injects AI directly into *any* text 
 
 <br/>
 
-[![Latest Release](https://img.shields.io/badge/Release-v1.3-blueviolet?style=flat-square)](#download)
+[![Latest Release](https://img.shields.io/badge/Release-v1.4-blueviolet?style=flat-square)](#download)
 [![APK Size](https://img.shields.io/badge/APK_Size-~20.4_MB-informational?style=flat-square)](#apk-info)
 [![Min SDK](https://img.shields.io/badge/Min_SDK-API_23-orange?style=flat-square)](#tech-stack)
 [![Target SDK](https://img.shields.io/badge/Target_SDK-API_35-brightgreen?style=flat-square)](#tech-stack)
@@ -133,13 +133,22 @@ sequenceDiagram
 
 | Property | Value |
 |:---|:---|
-| **Version** | v1.3 |
+| **Version** | v1.4 |
 | **APK Size** | ~20.4 MB (20,883 KB) |
 | **Architecture** | arm64-v8a |
 | **Min Android** | Android 6.0 (API 23) |
 | **Target Android** | Android 15 (API 35) |
 
-### ✨ What's New in v1.3
+### ✨ What's New in v1.4
+- **AI Temperature Control:** A brand-new **"AI Creativity"** section has been added to Settings. A smooth slider lets you dial the temperature from `0.0` (focused & deterministic) all the way to `2.0` (highly creative & varied). The selected value is persisted in SharedPreferences and passed to all providers — Gemini, Groq, and any OpenAI-compatible endpoint — replacing the old hardcoded default.
+- **Redesigned Keys Screen:** The API Keys page received a major facelift:
+  - A new **Usage Dashboard** widget at the top displays a 7-day mini bar chart of your AI request activity alongside a **"Most Used"** command card — all at a glance.
+  - Key cards are now cleaner and more compact, showing *"Provider Name Key #"* (e.g., `Gemini Key 1`) instead of the masked key string with badge chips.
+  - The **Save Key** button is now taller (`48 dp`) with a rounded `12 dp` corner radius for a more polished look.
+- **Redesigned Commands Screen:** The Commands tab received an extensive visual overhaul for a more intuitive and modern browsing experience.
+- **About Section in Settings:** A new **"About"** section with a tappable *"Support Buddy"* card links directly to the GitHub repository — a quick one-tap way to star the project.
+
+### ✨ Prior Release (v1.3)
 - **Groq API Support:** Complete integration for Groq as a first-class AI provider, bringing lightning-fast inferences. Supported models include:
   - `llama-3.3-70b-versatile`
   - `meta-llama/llama-4-scout-17b-16e-instruct`
