@@ -157,6 +157,8 @@ class AssistantService : AccessibilityService() {
             model = prefs.getString("model", "gemini-3.1-flash-lite-preview") ?: "gemini-3.1-flash-lite-preview"
             endpoint = ""
         }
+        
+        val temperature = prefs.getFloat("temperature", 0.5f).toDouble()
 
         currentJob = serviceScope.launch {
             val originalText = text
@@ -176,9 +178,9 @@ class AssistantService : AccessibilityService() {
 
                         // ── Python does the AI call ──────────────────────────
                         val result = when (providerType) {
-                            "custom" -> PythonBridge.openaiGenerate(command.prompt, text, key, model, DEFAULT_TEMPERATURE, endpoint)
-                            "groq"   -> PythonBridge.groqGenerate(command.prompt, text, key, model, DEFAULT_TEMPERATURE)
-                            else     -> PythonBridge.geminiGenerate(command.prompt, text, key, model, DEFAULT_TEMPERATURE)
+                            "custom" -> PythonBridge.openaiGenerate(command.prompt, text, key, model, temperature, endpoint)
+                            "groq"   -> PythonBridge.groqGenerate(command.prompt, text, key, model, temperature)
+                            else     -> PythonBridge.geminiGenerate(command.prompt, text, key, model, temperature)
                         }
 
                         usageManager.recordRequest(key, result.isSuccess)

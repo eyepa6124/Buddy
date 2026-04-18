@@ -343,80 +343,116 @@ fun KeysScreen(navController: NavController? = null) {
 
 @Composable
 private fun UsageDashboard(counts: List<Int>, mostUsedCommand: Pair<String, Int>) {
+    val daysOfWeek = remember {
+        val format = java.text.SimpleDateFormat("E", java.util.Locale.getDefault())
+        val days = mutableListOf<String>()
+        for (i in 6 downTo 0) {
+            val cal = Calendar.getInstance()
+            cal.add(Calendar.DAY_OF_YEAR, -i)
+            days.add(format.format(cal.time).take(1))
+        }
+        days
+    }
+
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        SlateCard(
-            modifier = Modifier.weight(1.3f),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
+        Surface(
+            modifier = Modifier.weight(1.3f).fillMaxHeight(),
+            shape = RoundedCornerShape(16.dp),
+            color = MaterialTheme.colorScheme.surface,
+            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
         ) {
-            Text(
-                text = "Last 7 Days Usage",
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            
-            val maxCount = counts.maxOrNull()?.coerceAtLeast(1) ?: 1
-            val primaryColor = MaterialTheme.colorScheme.primary
-            val surfaceVariant = MaterialTheme.colorScheme.surfaceVariant
-            
-            Canvas(modifier = Modifier.fillMaxWidth().height(48.dp)) {
-                val barWidth = 6.dp.toPx()
-                val gap = (size.width - (barWidth * 7)) / 6
+            Column(
+                modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 14.dp)
+            ) {
+                Text(
+                    text = "Last 7 Days Usage",
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(12.dp))
                 
-                counts.forEachIndexed { index, count ->
-                    val x = index * (barWidth + gap)
-                    val barHeight = (count.toFloat() / maxCount) * size.height
-                    val finalHeight = if (count == 0) 0f else barHeight.coerceAtLeast(4.dp.toPx())
-                    val y = size.height - finalHeight
+                val maxCount = counts.maxOrNull()?.coerceAtLeast(1) ?: 1
+                val primaryColor = MaterialTheme.colorScheme.primary
+                val surfaceVariant = MaterialTheme.colorScheme.surfaceVariant
+                
+                Canvas(modifier = Modifier.fillMaxWidth().height(48.dp)) {
+                    val barWidth = 6.dp.toPx()
+                    val gap = (size.width - (barWidth * 7)) / 6
                     
-                    drawRoundRect(
-                        color = surfaceVariant,
-                        topLeft = Offset(x, 0f),
-                        size = Size(barWidth, size.height),
-                        cornerRadius = CornerRadius(barWidth / 2)
-                    )
-                    
-                    if (count > 0) {
+                    counts.forEachIndexed { index, count ->
+                        val x = index * (barWidth + gap)
+                        val barHeight = (count.toFloat() / maxCount) * size.height
+                        val finalHeight = if (count == 0) 0f else barHeight.coerceAtLeast(4.dp.toPx())
+                        val y = size.height - finalHeight
+                        
                         drawRoundRect(
-                            color = primaryColor,
-                            topLeft = Offset(x, y),
-                            size = Size(barWidth, finalHeight),
+                            color = surfaceVariant,
+                            topLeft = Offset(x, 0f),
+                            size = Size(barWidth, size.height),
                             cornerRadius = CornerRadius(barWidth / 2)
+                        )
+                        
+                        if (count > 0) {
+                            drawRoundRect(
+                                color = primaryColor,
+                                topLeft = Offset(x, y),
+                                size = Size(barWidth, finalHeight),
+                                cornerRadius = CornerRadius(barWidth / 2)
+                            )
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    daysOfWeek.forEach { day ->
+                        Text(
+                            text = day,
+                            fontSize = 10.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                         )
                     }
                 }
             }
         }
 
-        SlateCard(
-            modifier = Modifier.weight(1f),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
+        Surface(
+            modifier = Modifier.weight(1f).fillMaxHeight(),
+            shape = RoundedCornerShape(16.dp),
+            color = MaterialTheme.colorScheme.surface,
+            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
         ) {
-            Text(
-                text = "Most Used",
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = mostUsedCommand.first,
-                fontSize = 17.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = "${mostUsedCommand.second} times",
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            Column(
+                modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 14.dp)
+            ) {
+                Text(
+                    text = "Most Used",
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = mostUsedCommand.first,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = "${mostUsedCommand.second} times",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }

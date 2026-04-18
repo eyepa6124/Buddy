@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -34,9 +35,11 @@ import com.buddyapp.Buddy.ui.components.ScreenTitle
 fun SettingsScreen() {
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
+    val uriHandler = LocalUriHandler.current
     val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
 
     var providerType by remember { mutableStateOf(prefs.getString("provider_type", "gemini") ?: "gemini") }
+    var temperature by remember { mutableFloatStateOf(prefs.getFloat("temperature", 0.5f)) }
 
     // Gemini settings
     var selectedModel by remember { mutableStateOf(prefs.getString("model", "gemini-3.1-flash-lite-preview") ?: "gemini-3.1-flash-lite-preview") }
@@ -245,6 +248,55 @@ fun SettingsScreen() {
 
         Spacer(modifier = Modifier.height(28.dp))
 
+        // Temperature Configuration Section
+        SettingsSection(title = "AI Creativity", icon = Icons.Outlined.Tune) {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Temperature",
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "Higher values make the AI more creative and less predictable.",
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Slider(
+                            value = temperature,
+                            onValueChange = { temperature = it },
+                            onValueChangeFinished = {
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                prefs.edit().putFloat("temperature", temperature).apply()
+                            },
+                            valueRange = 0f..2f,
+                            steps = 19, // 0.1 increments
+                            modifier = Modifier.weight(1f)
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(
+                            text = String.format(java.util.Locale.US, "%.1f", temperature),
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.width(28.dp)
+                        )
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(28.dp))
+
         // Trigger Configuration Section
         SettingsSection(title = "App Preferences", icon = Icons.Outlined.Keyboard) {
             Surface(
@@ -319,6 +371,45 @@ fun SettingsScreen() {
             }
         }
         
+        Spacer(modifier = Modifier.height(28.dp))
+
+        // GitHub Support
+        SettingsSection(title = "About", icon = Icons.Outlined.Info) {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                onClick = { uriHandler.openUri("https://github.com/Deepender25/Buddy") }
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Star,
+                        contentDescription = "Star",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "Support Buddy",
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 14.sp,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Star this repository on GitHub to show support!",
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+        }
+
         Spacer(modifier = Modifier.height(40.dp)) // bottom padding
     }
 }
